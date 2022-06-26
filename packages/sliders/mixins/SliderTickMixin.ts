@@ -1,14 +1,19 @@
 import { Constructor } from '../utils/MixinConstructor.js';
 import { LitElement } from 'lit';
+import { property } from 'lit/decorators.js';
+import { Ticks } from './Tick.js';
 
-export declare class SliderMixinInterface {
 
+
+declare interface SliderMixinInterface {
+    ticks: Ticks;
 }
 
-export const SliderMixin = <T extends Constructor<LitElement>>(superClass: T) => {
-    class SliderClass extends superClass {
-
+export function SliderMixin<T extends Constructor<LitElement>>(constructor: T): T & Constructor<SliderMixinInterface> {
+    class SliderClass extends constructor {
+        @property({ type: Array })
+        public ticks: Ticks = null;
     };
 
-    return SliderClass as Constructor<SliderMixinInterface> & T;
+    return SliderClass;
 }
