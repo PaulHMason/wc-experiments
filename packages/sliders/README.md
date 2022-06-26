@@ -10,18 +10,22 @@ There are a number of different slider variants:
   * Range
     * Vertical
     * Horizontal
-* Area (double axis - 2D. It does not have to be square)
-  * Single (e.g. color picker)
-  * Multi (seems weird, but here for completeness)
-  * Range (seems weird, but here for completeness)
 * Radial (donut, or knob - single axis)
   * Single
   * Multi (seems weird, but here for completeness)
   * Range
+* Rectangular Area (double axis - 2D. It does not have to be square)
+  * Single (e.g. color picker)
+  * Multi (seems weird, but here for completeness)
+  * Range (seems weird, but here for completeness)
 * Circular Area (double axis - 2D)
   * Single
   * Multi (seems weird, but here for completeness)
   * Range
+* Triangular Area (double axis - 2D)
+  * Single (e.g. color picker)
+  * Multi (seems weird, but here for completeness)
+  * Range (seems weird, but here for completeness)
 
 The core behaviour is shared between BaseSlider (the form element behaviour) and SliderController (the actual physical behaviour). The core properties are:
 
@@ -126,9 +130,9 @@ This is how the base classes will be organized.
     * BaseLinearRangeSlider (vertical and horizontal - may be variants or separate classes, will see)
     * BaseRadialRangeSlider
   * BaseAreaSlider (*may not be required*)
-    * BaseAreaSingleSlider (SingleSliderController)
-    * BaseAreaMultiSlider (MultiSliderController)
-    * BaseAreaRangeSlider (RangeSliderController)
+    * BaseRectangularAreaSingleSlider (SingleSliderController)
+    * BaseRectangularAreaMultiSlider (MultiSliderController)
+    * BaseRectangularAreaRangeSlider (RangeSliderController)
     * BaseCircularAreaSingleSlider (SingleSliderController)
     * BaseCircularAreaMultiSlider (MultiSliderController)
     * BaseCircularAreaRangeSlider (RangeSliderController)
