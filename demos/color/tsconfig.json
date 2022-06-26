@@ -1,0 +1,9 @@
+{
+    "extends": "tsconfig/lit.json",
+    "include": [
+        "**/*.ts"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}

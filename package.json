@@ -1,0 +1,29 @@
+{
+    "name": "wc-experiments",
+    "version": "0.0.0",
+    "private": true,
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/PaulHMason/wc-experiments.git"
+    },
+    "workspaces": [
+        "demos/*",
+        "packages/*"
+    ],
+    "scripts": {
+        "build": "turbo run build",
+        "dev": "turbo run build",
+        "start": "turbo run start --parallel",
+        "start-color": "turbo run start --filter=color",
+        "start-slider": "turbo run start --filter=slider"
+    },
+    "devDependencies": {
+        "turbo": "latest"
+    },
+    "engines": {
+        "npm": ">=7.0.0",
+        "node": ">=14.0.0"
+    },
+    "dependencies": {},
+    "packageManager": "npm@8.5.4"
+}
