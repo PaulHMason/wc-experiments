@@ -3,17 +3,15 @@ import { LitElement } from 'lit';
 import { property } from 'lit/decorators.js';
 import { Ticks } from './Tick.js';
 
-
-
-declare interface SliderMixinInterface {
+declare interface SliderTickMixinInterface {
     ticks: Ticks;
 }
 
-export function SliderMixin<T extends Constructor<LitElement>>(constructor: T): T & Constructor<SliderMixinInterface> {
-    class SliderClass extends constructor {
+export function SliderTickMixin<T extends Constructor<LitElement>>(constructor: T): T & Constructor<SliderTickMixinInterface> {
+    class SliderTickClass extends constructor {
         @property({ type: Array })
         public ticks: Ticks = null;
     };
 
-    return SliderClass;
+    return SliderTickClass;
 }

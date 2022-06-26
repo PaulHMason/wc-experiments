@@ -8,15 +8,15 @@ export type AreaTicks = {
     y: Ticks
 }
 
-export interface AreaSliderMixinInterface {
+export interface AreaSliderTickMixinInterface {
     ticks: AreaTicks;
 }
 
-export function AreaSliderMixin<T extends Constructor<LitElement>>(constructor: T): T & Constructor<AreaSliderMixinInterface> {
-    class AreaSliderClass extends constructor {
+export function AreaSliderTickMixin<T extends Constructor<LitElement>>(constructor: T): T & Constructor<AreaSliderTickMixinInterface> {
+    class AreaSliderTickClass extends constructor {
         @property({ type: Array })
         public ticks: AreaTicks = null;
     };
 
-    return AreaSliderClass;
+    return AreaSliderTickClass;
 }
