@@ -1,1 +1,1 @@
-export const a = 5;
+import './components/radial-slider.js';
