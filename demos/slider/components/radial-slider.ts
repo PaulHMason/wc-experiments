@@ -24,13 +24,14 @@ type RadialRect = {
     cy: number,
     r: number,
     ir: number,
-    or: number
+    or: number,
+    c: number
 }
 
 export class RadialSlider extends LitElement {
     private _track: HTMLElement = null;
     private _thumb: HTMLElement = null;
-    private _trackRect: RadialRect = { x: 0, y: 0, w: 0, h: 0, cx: 0, cy: 0, r: 0, ir: 0, or: 0 };
+    private _trackRect: RadialRect = { x: 0, y: 0, w: 0, h: 0, cx: 0, cy: 0, r: 0, ir: 0, or: 0, c: 0 };
     private _thumbRect: Rect = { x: 0, y: 0, w: 0, h: 0, cx: 0, cy: 0 };
     private _dragging: boolean = false;
 
@@ -46,8 +47,10 @@ export class RadialSlider extends LitElement {
         const htw = this.trackWidth / 2;
         const r = Math.sqrt((hh * hh) + (hw * hw));
 
-        this._trackRect = { x: trackRect.x, y: trackRect.y, w: trackRect.width, h: trackRect.height, cx: trackRect.x + hw, cy: trackRect.y + hh, r: r, ir: r - htw, or: r + htw };
+        this._trackRect = { x: trackRect.x, y: trackRect.y, w: trackRect.width, h: trackRect.height, cx: trackRect.x + hw, cy: trackRect.y + hh, r: r, ir: r - htw, or: r + htw, c: 2 * Math.PI * r };
         this._thumbRect = { x: thumbRect.x, y: thumbRect.y, w: thumbRect.width, h: thumbRect.height, cx: thumbRect.x + (thumbRect.width / 2), cy: thumbRect.y + (thumbRect.height / 2) };
+
+        this._positionThumb();
 
         console.log(this._trackRect);
         console.log(this._thumbRect);
@@ -98,16 +101,25 @@ export class RadialSlider extends LitElement {
     public max: number = 100;
 
     @property({ type: Number })
-    public value: number = 50;
+    public value: number = 0;
 
     @property({ type: Number, attribute: 'track-width' })
     public trackWidth: number = 20;
 
     protected firstUpdated(changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
-        super.updated(changedProperties);
+        super.firstUpdated(changedProperties);
         this._track = this.shadowRoot.getElementById('track');
         this._thumb = this.shadowRoot.getElementById('thumb');
         this._connectEvents();
+        this._positionThumb();
+    }
+
+    protected updated(changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
+        super.updated(changedProperties);
+
+        if (changedProperties.has('min') || changedProperties.has('max') || changedProperties.has('value') || changedProperties.has('trackWidth')) {
+            this._positionThumb();
+        }
     }
 
     public connectedCallback(): void {
@@ -169,7 +181,20 @@ export class RadialSlider extends LitElement {
     }
 
     private _positionThumb() {
+        const cx = this._trackRect.cx - this._trackRect.x - (this._thumbRect.w / 2);
+        const cy = this._trackRect.cy - this._trackRect.y - (this._thumbRect.h / 2);
+        
+        const a = this.value / (this.min + this.max) * this._trackRect.c;
+        const x = (cx + this._trackRect.r * Math.cos(a));
+        const y = (cy + this._trackRect.r * Math.sin(a));
+        
+        
+        console.log(`POSITION THUMB: (${x}, ${y})`);
 
+        Object.assign(this._thumb.style, {
+            left: `${x}px`,
+            top: `${y}px`
+        });
     }
 }
 
