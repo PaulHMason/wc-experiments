@@ -45,7 +45,7 @@ export class RadialSlider extends LitElement {
         const hh = trackRect.height / 2;
         const hw = trackRect.width / 2;
         const htw = this.trackWidth / 2;
-        const r = Math.sqrt((hh * hh) + (hw * hw));
+        const r = trackRect.width / 2;
 
         this._trackRect = { x: trackRect.x, y: trackRect.y, w: trackRect.width, h: trackRect.height, cx: trackRect.x + hw, cy: trackRect.y + hh, r: r, ir: r - htw, or: r + htw, c: 2 * Math.PI * r };
         this._thumbRect = { x: thumbRect.x, y: thumbRect.y, w: thumbRect.width, h: thumbRect.height, cx: thumbRect.x + (thumbRect.width / 2), cy: thumbRect.y + (thumbRect.height / 2) };
@@ -181,12 +181,12 @@ export class RadialSlider extends LitElement {
     }
 
     private _positionThumb() {
-        const cx = this._trackRect.cx - this._trackRect.x - (this._thumbRect.w / 2);
-        const cy = this._trackRect.cy - this._trackRect.y - (this._thumbRect.h / 2);
+        const x = this._trackRect.cx - this._trackRect.x - (this._thumbRect.w / 2) + this._trackRect.r;
+        const y = this._trackRect.cy - this._trackRect.y - (this._thumbRect.h / 2) + this._trackRect.r;
         
-        const a = this.value / (this.min + this.max) * this._trackRect.c;
-        const x = (cx + this._trackRect.r * Math.cos(a));
-        const y = (cy + this._trackRect.r * Math.sin(a));
+        //const a = this.value / (this.min + this.max) * this._trackRect.c;
+        //const x = (cx + (this._trackRect.r * Math.cos(a)));
+        //const y = (cy + (this._trackRect.r * Math.sin(a)));
         
         
         console.log(`POSITION THUMB: (${x}, ${y})`);
