@@ -1,4 +1,4 @@
-import { Position2D, SliderLimit, SliderStep, SliderValue, SliderValueMap, SliderPad } from "./SliderTypes.js";
+import { Vector2, SliderLimit, SliderStep, SliderValue, SliderValueMap, SliderPad, Movement } from "./SliderTypes.js";
 
 export interface ISlider {
     value: SliderValue;
@@ -7,5 +7,5 @@ export interface ISlider {
     step: SliderStep;
     valueMap: SliderValueMap;
     pad: SliderPad;
-    thumbPositions: Array<Position2D>;
+    thumbPositions: Array<Vector2>;
 }

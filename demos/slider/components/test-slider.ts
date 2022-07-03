@@ -29,6 +29,11 @@ export class TestSlider extends BaseSlider {
         }
     `;
 
+    constructor() {
+        super();
+        this.movement = 'any';
+    }
+
     public render() {
         return html`
             <div class="track"></div>

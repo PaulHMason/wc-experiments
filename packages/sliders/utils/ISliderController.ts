@@ -1,5 +1,6 @@
-import { Position2D } from "./SliderTypes.js";
+import { Movement, Vector2 } from "./SliderTypes.js";
 
 export interface ISliderController {
-    thumbPositions: Array<Position2D>;
+    thumbPositions: Array<Vector2>;
+    movement: Movement;
 }

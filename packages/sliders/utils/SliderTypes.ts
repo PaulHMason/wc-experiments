@@ -1,9 +1,10 @@
-export type Position2D = { x: number, y: number };
+export type Vector2 = { x: number, y: number };
 export type DoubleNumber = { start: number, end: number };
-export type DoublePosition = { start: Position2D, end: Position2D };
+export type DoublePosition = { start: Vector2, end: Vector2 };
+export type Movement = 'any' | 'horizontal' | 'vertical' | 'radial';
 
 /* SLIDER VALUE */
-export type SliderValue = null | number | Array<number> | Position2D | Array<Position2D> | DoubleNumber| DoublePosition;
+export type SliderValue = null | number | Array<number> | Vector2 | Array<Vector2> | DoubleNumber| DoublePosition;
 
 export enum SliderValueKind {
     Invalid,
@@ -38,18 +39,71 @@ export function getSliderValueKind(value: SliderValue): SliderValueKind {
     return SliderValueKind.Invalid;
 }
 
-export function sliderValueToArray(value: SliderValue): Array<Position2D> {
-    const kind = getSliderValueKind(value);
-    const result = [];
+export function ArrayToSliderValue(arr: Array<Vector2>, kind: SliderValueKind): SliderValue {
+    let result: SliderValue = null;
+
+    if (!arr && arr.length === 0) return null;
 
     switch (kind) {
+        case SliderValueKind.Number: {
+            return arr[0].x;
+        }
+
+        case SliderValueKind.Position: {
+            return { x: arr[0].x, y: arr[0].y };
+        }
+
+        case SliderValueKind.ArrayOfNumber: {
+            return arr.map(i => i.x);
+        }
+
+        case SliderValueKind.ArrayOfPosition: {
+            return arr.map(i => {
+                return {
+                    x: i.x,
+                    y: i.y
+                }
+            });
+        }
+
+        case SliderValueKind.DoubleNumber: {
+            if (arr.length == 2) {
+                return {
+                    start: arr[0].x,
+                    end: arr[1].x
+                }
+            }
+            
+            return null;
+        }
+
+        case SliderValueKind.DoublePosition: {
+            if (arr.length == 2) {
+                return {
+                    start: { x: arr[0].x, y: arr[0].y },
+                    end: { x: arr[1].x, y: arr[1].y }
+                }
+            }
+            
+            return null;
+        }
+    }
+
+    return result;
+}
+
+export function sliderValueToArray(value: SliderValue, kind?: SliderValueKind): Array<Vector2> {
+    const valueKind = kind || getSliderValueKind(value);
+    const result = [];
+
+    switch (valueKind) {
         case SliderValueKind.Number: {
             result.push({ x: value, y: value });
             break;
         }
 
         case SliderValueKind.Position: {
-            result.push({ x: (value as Position2D).x, y: (value as Position2D).y });
+            result.push({ x: (value as Vector2).x, y: (value as Vector2).y });
             break;
         }
 
@@ -59,7 +113,7 @@ export function sliderValueToArray(value: SliderValue): Array<Position2D> {
         }
 
         case SliderValueKind.ArrayOfPosition: {
-            (value as Array<Position2D>).forEach(v => {result.push({ x: v.x, y: v.y })});
+            (value as Array<Vector2>).forEach(v => {result.push({ x: v.x, y: v.y })});
             break;
         }
 
@@ -80,7 +134,7 @@ export function sliderValueToArray(value: SliderValue): Array<Position2D> {
 }
 
 /* SLIDER LIMIT */
-export type SliderLimit = null | number | Position2D;
+export type SliderLimit = null | number | Vector2;
 
 export enum SliderLimitKind {
     Invalid,
@@ -96,7 +150,7 @@ export function getSliderLimitKind(value: SliderLimit): SliderLimitKind {
     return SliderLimitKind.Invalid;
 }
 
-export function sliderLimitToPosition(value: SliderLimit): Position2D {
+export function sliderLimitToPosition(value: SliderLimit): Vector2 {
     const kind = getSliderLimitKind(value);
 
     switch (kind) {
@@ -105,7 +159,7 @@ export function sliderLimitToPosition(value: SliderLimit): Position2D {
         }
 
         case SliderLimitKind.Position: {
-            return { x: (value as Position2D).x, y: (value as Position2D).y };
+            return { x: (value as Vector2).x, y: (value as Vector2).y };
         }
     }
 
@@ -134,7 +188,7 @@ export function getSliderStepKind(value: SliderStep): SliderStepKind {
 export type SliderValueMap = null | string | { x: string, y: string };
 
 /* SLIDER PAD */
-export type SliderPad = number | Position2D;
+export type SliderPad = number | Vector2;
 
 export enum SliderPadKind {
     Invalid,
@@ -150,7 +204,7 @@ export function getSliderPadKind(value: SliderPad): SliderPadKind {
     return SliderPadKind.Invalid;
 }
 
-export function sliderPadToPosition(value: SliderPad): Position2D {
+export function sliderPadToPosition(value: SliderPad): Vector2 {
     const kind = getSliderPadKind(value);
 
     switch (kind) {
@@ -159,9 +213,22 @@ export function sliderPadToPosition(value: SliderPad): Position2D {
         }
 
         case SliderPadKind.Position: {
-            return { x: (value as Position2D).x, y: (value as Position2D).y };
+            return { x: (value as Vector2).x, y: (value as Vector2).y };
         }
     }
 
     return { x: 0, y: 0 };
 }
+
+/* UTILITY FUNCTIONS */
+export function clamp(value: number, min: number, max: number): number {
+    return Math.min(Math.max(value, min), max);
+};
+
+export function clampValues(values: Array<Vector2>, min: Vector2, max: Vector2) {
+    values.forEach(v => {
+        v.x = clamp(v.x, min.x, max.x);
+        v.y = clamp(v.y, min.y, max.y);
+    });
+}
+
