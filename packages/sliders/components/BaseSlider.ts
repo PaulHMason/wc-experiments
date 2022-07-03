@@ -1,19 +1,32 @@
-import { LitElement } from "lit";
+import { LitElement, ReactiveControllerHost } from "lit";
 import { property } from 'lit/decorators.js';
+import { BaseSliderController } from "../controllers/BaseSliderController.js";
+import { ISlider } from "../utils/ISlider.js";
+import { SliderValue, SliderLimit, SliderStep, SliderValueMap, Position2D, SliderPad } from "../utils/SliderTypes.js";
 
-export abstract class BaseSlider extends LitElement {
-    @property({ type: Object })
-    public value: null | number | object;
-
-    @property({ type: Object })
-    public min: null | number | { x: number, y: number } = null;
-
-    @property({ type: Object })
-    public max: null | number | { x: number, y: number } = null;
+export abstract class BaseSlider extends LitElement implements ReactiveControllerHost, ISlider {
+    protected controller: BaseSliderController = new BaseSliderController(this);
 
     @property({ type: Object })
-    public step: null | number | 'any' | { x: number | 'any', y: number | 'any' } = null;
+    public value: SliderValue = 0;
 
     @property({ type: Object })
-    public valueMap: null | string | { x: string, y: string }
+    public min: SliderLimit = 0;
+
+    @property({ type: Object })
+    public max: SliderLimit = 0;
+
+    @property({ type: Object })
+    public step: SliderStep = 'any';
+
+    @property({ type: Object })
+    public valueMap: SliderValueMap = null;
+
+    @property({ type: Object })
+    public pad: SliderPad = 0;
+
+    @property({ type: Array })
+    public get thumbPositions(): Array<Position2D> {
+        return this.controller.thumbPositions;
+    }
 }
